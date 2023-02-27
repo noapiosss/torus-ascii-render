@@ -1,6 +1,6 @@
 # ASII Torus (donut) rendering
 
-<img style="float: center;" src="https://i.imgur.com/Xtea2Qo.png">
+<img style="float: center;" src="https://i.imgur.com/XbQJrJq.png">
 
 #
 

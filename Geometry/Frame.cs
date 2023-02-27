@@ -6,6 +6,7 @@ namespace Donut.Geometry
 {
     public class Frame
     {
+        private static readonly char[] BrightnessGradient = new char[] { '@', '%', '$', '#', '!', '=', ';', ':', '~', '-', ',', '.' };
         public Screen Screen { get; set; }
         public Vector3 CameraPosition { get; init; }
         public Vector3 ScreenCenter { get; set; }
@@ -86,21 +87,8 @@ namespace Donut.Geometry
         {
             Vector3 lightToPoint = point.Position - Light;
             double angle = Math.Acos(Vector3.Dot(lightToPoint, point.Normal) / (lightToPoint.Length() * point.Normal.Length()));
-            double brightness = 2 * 255 * angle / Math.PI;
 
-            return brightness < 23
-                ? '.'
-                : brightness < 46
-                ? ','
-                : brightness < 69
-                ? '-'
-                : brightness < 92
-                ? '~'
-                : brightness < 115
-                ? ':'
-                : brightness < 138
-                ? ':'
-                : brightness < 161 ? '=' : brightness < 184 ? '!' : brightness < 207 ? '#' : brightness < 230 ? '$' : '@';
+            return BrightnessGradient[(int)Math.Round((BrightnessGradient.Length - 1) * angle / Math.PI)];
         }
     }
 }

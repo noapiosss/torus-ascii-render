@@ -37,23 +37,23 @@ namespace Donut.Geometry.Figures
             Polygons = Array.Empty<Polygon>();
             List<Polygon> polygons = new()
             {
-                new(B1, D1, A1, '@'),
-                new(D1, B1, C1, '@'),
+                new(B1, D1, A1),
+                new(D1, B1, C1),
 
-                new(D2, C2, B2, '^'),
-                new(A2, D2, B2, '^'),
+                new(D2, C2, B2),
+                new(A2, D2, B2),
 
-                new(B2, C2, B1, 'o'),
-                new(C2, C1, B1, 'o'),
+                new(B2, C2, B1),
+                new(C2, C1, B1),
 
-                new(C2, D1, C1, 'x'),
-                new(C2, D2, D1, 'x'),
+                new(C2, D1, C1),
+                new(C2, D2, D1),
 
-                new(D2, A1, D1, '*'),
-                new(D2, A2, A1, '*'),
+                new(D2, A1, D1),
+                new(D2, A2, A1),
 
-                new(B2, B1, A1, '#'),
-                new(A2, B2, A1, '#')
+                new(B2, B1, A1),
+                new(A2, B2, A1)
             };
 
             Polygons = polygons.ToArray();

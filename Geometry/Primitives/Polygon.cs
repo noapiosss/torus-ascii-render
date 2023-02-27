@@ -13,7 +13,7 @@ namespace Donut.Geometry.Primitives
         public Vector3 Normal { get; set; }
         public char Color { get; set; }
 
-        public Polygon(Vector3 a, Vector3 b, Vector3 c, char color)
+        public Polygon(Vector3 a, Vector3 b, Vector3 c, char color = '@')
         {
             A = a;
             B = b;

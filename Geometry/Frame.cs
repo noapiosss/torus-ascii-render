@@ -6,25 +6,25 @@ namespace Donut.Geometry
 {
     public class Frame
     {
-        public int Height { get; init; }
-        public int Width { get; init; }
-        public int CameraDistance { get; init; }
+        public Screen Screen { get; set; }
+        public Vector3 CameraPosition { get; init; }
+        public Vector3 ScreenCenter { get; set; }
         public char[,] Pixels { get; set; }
         private readonly double[,] _depthBuffer;
         public Vector3 Light { get; set; }
 
-        public Frame(int height, int width, int cameraDistance)
+        public Frame(Screen screen, Vector3 cameraPosition)
         {
-            Height = height;
-            Width = width;
-            CameraDistance = cameraDistance;
-            Pixels = new char[width, height];
-            _depthBuffer = new double[width, height];
-            Light = new(0, 0, -CameraDistance);
+            Screen = screen;
+            ScreenCenter = new(screen.Height / 2, screen.Width / 2, 0);
+            CameraPosition = cameraPosition;
+            Pixels = new char[screen.Width, screen.Height];
+            _depthBuffer = new double[screen.Width, screen.Height];
+            Light = CameraPosition;
 
-            for (int i = 0; i < width; ++i)
+            for (int i = 0; i < screen.Width; ++i)
             {
-                for (int j = 0; j < height; ++j)
+                for (int j = 0; j < screen.Height; ++j)
                 {
                     Pixels[i, j] = ' ';
                     _depthBuffer[i, j] = double.MaxValue;
@@ -34,9 +34,9 @@ namespace Donut.Geometry
 
         public void Clear()
         {
-            for (int i = 0; i < Width; ++i)
+            for (int i = 0; i < Screen.Width; ++i)
             {
-                for (int j = 0; j < Height; ++j)
+                for (int j = 0; j < Screen.Height; ++j)
                 {
                     Pixels[i, j] = ' ';
                     _depthBuffer[i, j] = double.MaxValue;
@@ -56,18 +56,14 @@ namespace Donut.Geometry
         {
             foreach (Point point in points)
             {
-                int x = (int)Math.Round(point.Position.X * CameraDistance / (point.Position.Z + CameraDistance));
-                int y = (int)Math.Round(point.Position.Y * CameraDistance / (point.Position.Z + CameraDistance));
+                int x = (int)Math.Round(point.Position.X * Screen.ZDistanse / point.Position.Z) + (Screen.Width / 2);
+                int y = (int)Math.Round(point.Position.Y * Screen.ZDistanse / point.Position.Z) + (Screen.Height / 2);
 
-                Vector3 lightToPoint = point.Position - Light;
-                double angle = Math.Acos(Vector3.Dot(lightToPoint, point.Normal) / (lightToPoint.Length() * point.Normal.Length()));
-                char color = GetColor(2 * 255 * angle / Math.PI);
+                double distance = Vector3.Distance(CameraPosition, point.Position);
 
-                double distance = Math.Sqrt(Math.Pow(point.Position.X, 2) + Math.Pow(point.Position.Y, 2) + Math.Pow(point.Position.Z + CameraDistance, 2));
-
-                if (x >= 0 && x < Width && y >= 0 && y < Height && _depthBuffer[x, y] > distance)
+                if (x >= 0 && x < Screen.Width && y >= 0 && y < Screen.Height && _depthBuffer[x, y] > distance)
                 {
-                    Pixels[x, y] = color;
+                    Pixels[x, y] = GetBrightness(Light, point);
                     _depthBuffer[x, y] = distance;
                 }
             }
@@ -76,9 +72,9 @@ namespace Donut.Geometry
         public void Render()
         {
             Console.Clear();
-            for (int i = 0; i < Width; ++i)
+            for (int i = 0; i < Screen.Width; ++i)
             {
-                for (int j = 0; j < Height; ++j)
+                for (int j = 0; j < Screen.Height; ++j)
                 {
                     Console.Write(Pixels[i, j]);
                 }
@@ -86,8 +82,12 @@ namespace Donut.Geometry
             }
         }
 
-        private static char GetColor(double brightness)
+        private static char GetBrightness(Vector3 Light, Point point)
         {
+            Vector3 lightToPoint = point.Position - Light;
+            double angle = Math.Acos(Vector3.Dot(lightToPoint, point.Normal) / (lightToPoint.Length() * point.Normal.Length()));
+            double brightness = 2 * 255 * angle / Math.PI;
+
             return brightness < 23
                 ? '.'
                 : brightness < 46

@@ -26,9 +26,9 @@ namespace Donut.Geometry.Figures
             Points = Array.Empty<Point>();
             List<Point> points = new();
 
-            for (float u = 0; u < Center.X + Radius; u += 0.1f)
+            for (float u = 0; u < Center.X + Radius; u += 0.05f)
             {
-                for (float v = 0; v < Center.Y + Radius; v += 0.1f)
+                for (float v = 0; v < Center.Y + Radius; v += 0.05f)
                 {
                     points.Add(new(
                         x: (float)((Radius + (TubeRadius * Math.Cos(v))) * Math.Cos(u)) + Center.X,
@@ -54,6 +54,24 @@ namespace Donut.Geometry.Figures
             foreach (Point point in Points)
             {
                 point.RotatePointY(pivot, angle);
+            }
+        }
+
+        public void RotateZ(Vector3 pivot, float angle)
+        {
+            foreach (Point point in Points)
+            {
+                point.RotatePointZ(pivot, angle);
+            }
+        }
+
+        public void MoveZ(float distance)
+        {
+            Center = Center.MoveZ(distance);
+
+            foreach (Point point in Points)
+            {
+                point.MoveZ(distance);
             }
         }
     }

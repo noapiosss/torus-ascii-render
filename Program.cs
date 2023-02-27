@@ -7,7 +7,7 @@ Screen screen = new(100, 60, 50);
 Frame frame = new(screen, Vector3.Zero);
 
 Vector3 torusCenter = new(0, 0, 100);
-Torus torus = new(torusCenter, 25, 20);
+Torus torus = new(torusCenter, 25, 15);
 
 frame.Light = new(torusCenter.X - 500, torusCenter.Y - 500, torusCenter.Z);
 
@@ -20,19 +20,27 @@ while (true)
 
     if (key.Key == ConsoleKey.UpArrow)
     {
-        torus.RotateY(torusCenter, -0.1f);
+        torus.RotateY(torus.Center, -0.1f);
     }
     if (key.Key == ConsoleKey.DownArrow)
     {
-        torus.RotateY(torusCenter, 0.1f);
+        torus.RotateY(torus.Center, 0.1f);
     }
     if (key.Key == ConsoleKey.RightArrow)
     {
-        torus.RotateX(torusCenter, -0.1f);
+        torus.RotateX(torus.Center, -0.1f);
     }
     if (key.Key == ConsoleKey.LeftArrow)
     {
-        torus.RotateX(torusCenter, 0.1f);
+        torus.RotateX(torus.Center, 0.1f);
+    }
+    if (key.Key == ConsoleKey.I)
+    {
+        torus.MoveZ(-5f);
+    }
+    if (key.Key == ConsoleKey.O)
+    {
+        torus.MoveZ(5f);
     }
 
     frame.Clear();

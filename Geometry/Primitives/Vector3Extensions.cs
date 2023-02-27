@@ -37,5 +37,10 @@ namespace Donut.Geometry.Primitives
 
             return Vector3.Transform(vector - pivot, matrix) + pivot;
         }
+
+        public static Vector3 MoveZ(this Vector3 vector, float distance)
+        {
+            return new(vector.X, vector.Y, vector.Z + distance);
+        }
     }
 }

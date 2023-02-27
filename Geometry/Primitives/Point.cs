@@ -32,5 +32,10 @@ namespace Donut.Geometry.Primitives
             Position = Position.RotateZ(pivot, angle);
             Normal = Normal.RotateX(Vector3.Zero, angle);
         }
+
+        public void MoveZ(float distance)
+        {
+            Position = Position.MoveZ(distance);
+        }
     }
 }
